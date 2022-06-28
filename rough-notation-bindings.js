@@ -53,7 +53,7 @@ const buildSelector = (type) => `.rn-effect-${type}`;
 const groups = {};
 const ungrouped = [];
 
-const effectOptions = {
+const DEFAULT_EFFECT_OPTIONS = {
     highlight: {
         type: "highlight",
         color: "rgba(255, 207, 11, .4)"
@@ -74,7 +74,7 @@ const parseAttributes = (el, options = {}) => {
 };
 
 const buildOptions = (effect, el) => {
-    const defaults = effectOptions[effect] || {};
+    const defaults = DEFAULT_EFFECT_OPTIONS[effect] || {};
     const out = parseAttributes(el, defaults);
     out.type = effect;
     return out;
