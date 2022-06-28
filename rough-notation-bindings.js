@@ -10,7 +10,7 @@ const effectNames = [
 
 const PARSERS = {
     animate: mapAttribToProperty("animate", "animate", (a) => !a.toLowerCase() === "false"),
-    brackets: mapAttribToProperty("brackets"), // TODO: MIKE: verify this works
+    bracket: mapAttribToProperty("bracket"), // TODO: MIKE: verify this works
     color: mapAttribToProperty("color"),
     delay: mapAttribToProperty("delay"),
     duration: mapAttribToProperty("duration", "animationDuration"),
