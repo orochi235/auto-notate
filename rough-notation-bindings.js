@@ -9,19 +9,16 @@ const effectNames = [
 ];
 
 const PARSERS = {
-    // TODO: MIKE: multiline, brackets; fix padding and rtl
-    animate: mapAttribToProperty("animate", "animate", (a) => !a === "false"),
+    animate: mapAttribToProperty("animate", "animate", (a) => !a.toLowerCase() === "false"),
+    brackets: mapAttribToProperty("brackets"), // TODO: MIKE: verify this works
     color: mapAttribToProperty("color"),
     delay: mapAttribToProperty("delay"),
     duration: mapAttribToProperty("duration", "animationDuration"),
-    iterations: mapAttribToProperty("iterations"),
-    padding: mapAttribToProperty("padding"), // TODO: MIKE: not working
+    iterations: mapAttribToProperty("iterations", "iterations", a => parseInt(a, 10)),
+    multiline: mapAttribToProperty("multiline", "multiline", (a) => a !== undefined),
+    padding: mapAttribToProperty("padding", "padding", a => parseInt(a, 10)),
     strokeWidth: mapAttribToProperty("stroke-width", "strokeWidth"),
-    rtl: mapAttribToProperty(
-        "direction",
-        "rtl",
-        (a) => a.toLowerCase() === "ccw"
-    ), // TODO: MIKE: set in model but not working
+    rtl: mapAttribToProperty("reverse", "rtl", (a) => a !== undefined),
     groupName: mapAttribToProperty(
         "group",
         "_groupName",
@@ -45,8 +42,10 @@ const PARSERS = {
 function mapAttribToProperty(attribName, propName, fn = (a) => a) {
     if (propName === undefined) propName = attribName;
     return (el, options) => {
-        const attrib = el.getAttribute(`data-effect-${attribName}`);
-        if (attrib) return [propName, fn(attrib, el, options)];
+        if (el.hasAttribute(`data-effect-${attribName}`)) {
+            const attrib = el.getAttribute(`data-effect-${attribName}`);
+            return [propName, fn(attrib, el, options)];
+        }
     };
 }
 
