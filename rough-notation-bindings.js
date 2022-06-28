@@ -10,13 +10,13 @@ const effectNames = [
 
 const PARSERS = {
     animate: mapAttribToProperty("animate", "animate", (a) => !a.toLowerCase() === "false"),
-    bracket: mapAttribToProperty("bracket"), // TODO: MIKE: verify this works
+    brackets: mapAttribToProperty("brackets", "brackets", a => a.split(',').map(b => b.trim())),
     color: mapAttribToProperty("color"),
-    delay: mapAttribToProperty("delay"),
-    duration: mapAttribToProperty("duration", "animationDuration"),
-    iterations: mapAttribToProperty("iterations", "iterations", a => parseInt(a, 10)),
+    delay: mapAttribToProperty("delay", "_delay", parseFloat),
+    duration: mapAttribToProperty("duration", "animationDuration", a => parseFloat(a) * 1000),
+    iterations: mapAttribToProperty("iterations", "iterations", parseFloat),
     multiline: mapAttribToProperty("multiline", "multiline", (a) => a !== undefined),
-    padding: mapAttribToProperty("padding", "padding", a => parseInt(a, 10)),
+    padding: mapAttribToProperty("padding", "padding", parseFloat),
     strokeWidth: mapAttribToProperty("stroke-width", "strokeWidth"),
     rtl: mapAttribToProperty("reverse", "rtl", (a) => a !== undefined),
     groupName: mapAttribToProperty(
@@ -96,7 +96,7 @@ const runEffect = (el, options) => {
     if (options._delay) {
         setTimeout(() => {
             anno.show();
-        }, options._delay);
+        }, options._delay * 1000);
     } else {
         anno.show();
     }
