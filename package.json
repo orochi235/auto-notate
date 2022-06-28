@@ -1,0 +1,14 @@
+{
+  "name": "auto-notate",
+  "version": "1.0.0",
+  "description": "Wrapper for Rough Notation, allowing invocations of it to be specified using data attributes and CSS classes.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "rough-notation": "^0.5.1"
+  }
+}
