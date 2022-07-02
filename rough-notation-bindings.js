@@ -1,12 +1,19 @@
-const effectNames = [
+const NATIVE_EFFECTS = [
     "underline",
     "box",
     "circle",
     "highlight",
     "strike-through",
     "crossed-off",
-    "bracket"
+    "bracket",
 ];
+
+const effectNames = [
+    ...NATIVE_EFFECTS,
+    "link-hover",
+];
+
+const DEFAULT_LINK_STYLE = "double";
 
 const PARSERS = {
     animate: mapAttribToProperty("animate", "animate", (a) => !a.toLowerCase() === "false"),
@@ -15,6 +22,7 @@ const PARSERS = {
     delay: mapAttribToProperty("delay", "_delay", parseFloat),
     duration: mapAttribToProperty("duration", "animationDuration", a => parseFloat(a) * 1000),
     iterations: mapAttribToProperty("iterations", "iterations", parseFloat),
+    // "link-style": handled externally
     multiline: mapAttribToProperty("multiline", "multiline", (a) => a !== undefined),
     padding: mapAttribToProperty("padding", "padding", parseFloat),
     strokeWidth: mapAttribToProperty("stroke-width", "strokeWidth"),
@@ -57,8 +65,32 @@ const DEFAULT_EFFECT_OPTIONS = {
     highlight: {
         type: "highlight",
         color: "rgba(255, 207, 11, .4)"
-    }
+    },
 };
+
+const LINK_STYLES = {
+    double: {
+        type: "highlight",
+        color: "rgba(255, 209, 59, .6)",
+        animationDuration: 500,
+        iterations: 2,
+        multiline: true,
+    },
+    angry: {
+        type: "highlight",
+        color: "rgba(255, 100, 100, .1)",
+        animationDuration: 4000,
+        iterations: 33,
+        multiline: true,
+    },
+    quick: {
+        type: "highlight",
+        color: "rgba(255, 209, 59, .8)",
+        animationDuration: 100,
+        iterations: 1,
+        multiline: true,
+    },
+}
 
 const parseAttributes = (el, options = {}) => {
     options = {...options};
@@ -72,6 +104,24 @@ const parseAttributes = (el, options = {}) => {
 
     return options;
 };
+
+function bindLinkHover(el, preset = DEFAULT_LINK_STYLE) {
+    if (el.hasAttribute("data-link-hover-bound")) return;
+    el.setAttribute("data-link-hover-bound", true);
+    $(el).mouseover(ev => {
+        const anno = RoughNotation.annotate(ev.target, LINK_STYLES[preset]);
+        anno.show();
+        ($(ev.target).one("mouseout", () => {
+            anno.hide();
+        }))
+    })
+}
+
+function bindAllLinkHovers() {
+    for (const el of $("a.rn-effect-link-hover")) {
+        bindLinkHover(el, el.getAttribute("data-effect-link-style") ?? undefined);
+    }
+}
 
 const buildOptions = (effect, el) => {
     const defaults = DEFAULT_EFFECT_OPTIONS[effect] || {};
@@ -100,6 +150,7 @@ const runEffect = (el, options) => {
     } else {
         anno.show();
     }
+    ungrouped.push(anno);
 };
 
 function runGroup(group) {
@@ -122,4 +173,5 @@ function runGroups() {
 
 $(() => {
     initEffects();
+    bindAllLinkHovers();
 });

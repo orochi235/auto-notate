@@ -11,10 +11,13 @@
         }
 
         .root {
-            margin: 30px;
+            margin: 30px 30px 100px;
             width: 900px;
         }
     </style>
+    <script src="./node_modules/rough-notation/lib/rough-notation.iife.js"></script>
+    <script src="./node_modules/jquery/dist/jquery.js"></script>
+    <script src="./rough-notation-bindings.js"></script>
 </head>
 <body>
 <div class="root rn-effect-bracket"
@@ -46,6 +49,21 @@
     <span class="rn-effect-crossed-off" data-effect-group="sample/1">hope/</span><span class="rn-effect-strike-through" data-effect-group="sample/2">want/</span><span class="rn-effect-underline" data-effect-group="sample/3">need</span>
     <span> to </span>
     <span data-effect-color="red" class="rn-effect-bracket">emphasize.</span>
+</div>
+<div>Now
+    <a href="https://www.msnbc.com/"
+       class="rn-effect-link-hover"
+       target="_blank"
+       data-effect-link-style="quick">this is a story</a>
+    all about how
+    <a href="https://www.clickhole.com/"
+       class="rn-effect-link-hover"
+       target="_blank">my life got twist-turned upside-down</a>
+    and I'd
+    <a href="https://www.foxnews.com/"
+       class="rn-effect-link-hover"
+       target="_blank"
+       data-effect-link-style="angry">like to take a moment</a>
 </div>
 </body>
 </html>
