@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html {
+            margin: 60px 200px;
+            font-size: 32px;
+            line-height: 60px;
+        }
+
+        .root {
+            margin: 30px 30px 100px;
+            width: 900px;
+        }
+    </style>
+    <script src="./node_modules/rough-notation/lib/rough-notation.iife.js"></script>
+    <script src="./node_modules/jquery/dist/jquery.js"></script>
+    <script src="./rough-notation-bindings.js"></script>
+</head>
+<body>
+<div class="root rn-effect-bracket"
+     data-effect-brackets="left, top, right, top, bottom, left, right, bottom"
+     data-effect-padding="30"
+     data-effect-duration="5">
+    <span class="rn-effect-bracket" data-effect-brackets="left" data-effect-color="red">I'm </span>
+    <span class="rn-effect-underline" data-effect-reverse>adding</span>
+    <span> this </span>
+    <span class="rn-effect-highlight"
+          data-effect-color="rgba(0,255,225,.18)"
+          data-effect-iterations="8"
+          data-effect-duration="2">cool</span>
+    <span class="rn-effect-box rn-effect-highlight" style="position: relative;"> annotation library </span>
+    <span> so you can </span>
+    <span class="rn-effect-highlight" style="position: relative;" data-effect-animate="false">highlight </span>
+    <span>and </span>
+    <span class="rn-effect-circle"
+          data-effect-color="rgba(20,20,200,.07)"
+          data-effect-iterations="4"
+          data-effect-duration="2.5"
+          data-effect-delay="2"
+          data-effect-stroke-width="10"
+          data-effect-padding="20"
+          data-effect-multiline>draw attention</span>
+    <span> to </span>
+    <span class="rn-effect-box" data-effect-color="rgba(200,40,40,.8)" data-effect-iterations="5" data-effect-duration="7">important ideas</span>
+    <span> that you </span>
+    <span class="rn-effect-crossed-off" data-effect-group="sample/1">hope/</span><span class="rn-effect-strike-through" data-effect-group="sample/2">want/</span><span class="rn-effect-underline" data-effect-group="sample/3">need</span>
+    <span> to </span>
+    <span data-effect-color="red" class="rn-effect-bracket">emphasize.</span>
+</div>
+<div>Now
+    <a href="https://www.msnbc.com/"
+       class="rn-effect-link-hover"
+       target="_blank"
+       data-effect-link-style="quick">this is a story</a>
+    all about how
+    <a href="https://www.clickhole.com/"
+       class="rn-effect-link-hover"
+       target="_blank">my life got twist-turned upside-down</a>
+    and I'd
+    <a href="https://www.foxnews.com/"
+       class="rn-effect-link-hover"
+       target="_blank"
+       data-effect-link-style="angry">like to take a moment</a>
+</div>
+</body>
+</html>

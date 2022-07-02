@@ -7,6 +7,7 @@
 //    "target": "es5",
     "allowJs": true,
     "moduleResolution": "Node",
+    "outDir": "../dist",
+    "esModuleInterop": true,
   },
-  "files": ["index.ts"]
 }

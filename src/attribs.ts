@@ -1,0 +1,43 @@
+import { AttribParserCallback, AttributeMapper, AttributeParserCallbackResult } from "./types";
+import { GroupAttributeParsers } from "./groups";
+import { Options, ParserMap } from "./types";
+
+const PARSERS: ParserMap = {
+    animate: mapAttribToProperty("animate", "animate", (a) => !(a.toLowerCase() === "false")),
+    brackets: mapAttribToProperty("brackets", "brackets", a => a.split(',').map(b => b.trim())),
+    color: mapAttribToProperty("color"),
+    delay: mapAttribToProperty("delay", "_delay", parseFloat),
+    duration: mapAttribToProperty("duration", "animationDuration", a => parseFloat(a) * 1000),
+    iterations: mapAttribToProperty("iterations", "iterations", parseFloat),
+    // "link-style": handled externally
+    multiline: mapAttribToProperty("multiline", "multiline", (a) => a !== undefined),
+    padding: mapAttribToProperty("padding", "padding", parseFloat),
+    strokeWidth: mapAttribToProperty("stroke-width", "strokeWidth"),
+    rtl: mapAttribToProperty("reverse", "rtl", (a) => a !== undefined),
+    ...GroupAttributeParsers
+};
+
+export function mapAttribToProperty(attribName: string,
+                                    propName: string = attribName,
+                                    fn: AttribParserCallback = (a) => a,
+): AttributeMapper {
+    return (el, options) => {
+        if (el.hasAttribute(`data-effect-${attribName}`)) {
+            const attrib = el.getAttribute(`data-effect-${attribName}`);
+            return [propName, fn(attrib, el, options)];
+        }
+    };
+}
+
+export function parseAttributesForElement(el: HTMLElement, options: Options = {}): Options {
+    options = { ...options };
+
+    for (const prop of Object.keys(PARSERS)) {
+        const result: AttributeParserCallbackResult = PARSERS[prop](el, options);
+        if (result) {
+            options[result[0]] = result[1];
+        }
+    }
+
+    return options;
+}
