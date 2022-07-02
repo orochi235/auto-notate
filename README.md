@@ -6,7 +6,7 @@ This is a simple JS library that wraps the RoughNotation library and binds it to
 
 ### Effects
 
-Effects are implemented via CSS classes bound to qualifying elements. The following are supported:
+Effects are implemented via CSS classes bound to qualifying elements. The following native effects are supported:
 
 - `rn-effect-box`
 - `rn-effect-bracket`
@@ -15,6 +15,8 @@ Effects are implemented via CSS classes bound to qualifying elements. The follow
 - `rn-effect-highlight`
 - `rn-effect-strike-through`
 - `rn-effect-underline`
+
+Additionally, the "virtual" effect `rn-effect-link-hover` is supported. When this class is used, a link hover style can optionally be specified by the data attribute `data-effect-link-style`.
 
 ### Params
 
@@ -56,3 +58,6 @@ Note that RoughNotation only supports this option for the `highlight`, `underlin
 - support for event binding (as opposed to running on page load)
 - flexible api naming conventions
 - typescript support
+- organize project better
+- apply data attrib params to links where possible
+- tests (lol)
