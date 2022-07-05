@@ -41,7 +41,6 @@ export const initEffects = () => {
         const e = $(buildSelector(effectName));
         for (const el of e) {
             const options = buildOptions(effectName as RoughAnnotationType, el);
-            console.log('element', el, options);
             if (!options._groupName) runEffect(el, options);
             else registerAsGroupMember(el, options);
         }
