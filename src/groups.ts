@@ -14,9 +14,13 @@ export type Group = Array<{ el: HTMLElement; options: Options }> & {
 export type Groups = {
   [groupName: string]: Group;
 };
+type PreGroupedElement = {
+  el: HTMLElement,
+  options: {},
+};
 
-// internal registry of groups we've created
-const _allGroups: Groups = {};
+const _rawGroupedElements: PreGroupedElement[] = []; // we dump everything that comes through register() into here
+const _allGroups: Groups = {}; // internal registry of groups we've created
 
 function runGroup(name: string, group: Group) {
   const sortedGroup = [...group].sort(
@@ -36,10 +40,14 @@ function runGroup(name: string, group: Group) {
   _allGroups[name] = group;
 }
 
-export function init(groups: Groups) {
+export function init(groups: Groups = _allGroups) {
   for (const groupName of Object.keys(groups)) {
     runGroup(groupName, groups[groupName]);
   }
+}
+
+export function register(el: HTMLElement, options: {}) {
+  _rawGroupedElements.push({el, options});
 }
 
 export const GroupAttributeParsers = {

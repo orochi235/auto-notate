@@ -12,8 +12,8 @@ export enum NativeEffects {
     box = "box",
     circle = "circle",
     highlight = "highlight",
-    strikethrough = "strike-through",
-    crossedOff = "crossed-off",
+    "strike-through" = "strike-through",
+    "crossed-off" = "crossed-off",
     bracket = "bracket"
 }
 

@@ -1,8 +1,9 @@
-import { NativeEffects, Options } from "./types";
 import $ from "jquery";
-import { RoughAnnotationConfig, RoughAnnotationType } from "rough-notation/lib/model";
 import * as RoughNotation from "rough-notation";
+import { RoughAnnotationConfig, RoughAnnotationType } from "rough-notation/lib/model";
+import { NativeEffects, Options } from "./types";
 import { parseAttributesForElement } from "./attribs";
+import { register as registerAsGroupMember, init as initGroupEffects } from './groups';
 
 const _allEffects = [];
 
@@ -40,9 +41,12 @@ export const initEffects = () => {
         const e = $(buildSelector(effectName));
         for (const el of e) {
             const options = buildOptions(effectName as RoughAnnotationType, el);
+            console.log('element', el, options);
             if (!options._groupName) runEffect(el, options);
+            else registerAsGroupMember(el, options);
         }
     }
+    initGroupEffects();
 };
 
 export const runEffect = (el: HTMLElement, options: Options) => {

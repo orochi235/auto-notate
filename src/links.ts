@@ -1,3 +1,4 @@
+// @ts-ignore
 import $ from "jquery";
 import * as RoughNotation from "rough-notation";
 import { RoughAnnotationConfig } from "rough-notation/lib/model";

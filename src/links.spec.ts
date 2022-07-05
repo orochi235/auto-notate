@@ -22,7 +22,7 @@ describe("link hovers", () => {
   });
 
   it("binds to marked links", () => {
-    bindAllLinkHovers(document);
+    bindAllLinkHovers();
     expect(_boundLinks.length).toEqual(2);
   });
 });

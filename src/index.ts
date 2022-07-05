@@ -1,3 +1,4 @@
+// @ts-ignore
 import $ from "jquery";
 import { initEffects } from "./effects";
 import { bindAllLinkHovers } from "./links";
