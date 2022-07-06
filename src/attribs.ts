@@ -1,4 +1,4 @@
-import { AttribParserCallback, AttributeMapper, AttributeParserCallbackResult } from "./types";
+import { AttribParserCallback, AttribParserParams, AttributeMapper, AttributeParserCallbackResult } from "./types";
 import { GroupAttributeParsers } from "./groups";
 import { Options, ParserMap } from "./types";
 
@@ -14,8 +14,16 @@ const PARSERS: ParserMap = {
     padding: mapAttribToProperty("padding", "padding", parseFloat),
     strokeWidth: mapAttribToProperty("stroke-width", "strokeWidth"),
     rtl: mapAttribToProperty("reverse", "rtl", (a) => a !== undefined),
-    ...GroupAttributeParsers
+    ...buildParsers(GroupAttributeParsers)
 };
+
+function buildParsers(params: {[paramName: string]: AttribParserParams}) {
+    const out: ParserMap = {};
+    for (const paramName in params) {
+        out[paramName] = mapAttribToProperty.apply(null, params[paramName]);
+    }
+    return out;
+}
 
 export function mapAttribToProperty(attribName: string,
                                     propName: string = attribName,

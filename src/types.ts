@@ -26,6 +26,7 @@ export type AttributeParserCallbackResult = [string, string | void] | void;
 export type AttribParserCallback =
     (attrib: string, el: HTMLElement, options: Options) => AttributeParserCallbackResult
         | any;
+export type AttribParserParams = [string, string | undefined, AttribParserCallback];
 export type AttributeMapper = (el: HTMLElement, options: Options) => AttributeMapperResult;
 export type EffectGroup = Array<{ el: HTMLElement, options: Options }>;
 export type EffectGroups = {

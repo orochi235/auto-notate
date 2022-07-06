@@ -55,9 +55,23 @@ Note that RoughNotation only supports this option for the `highlight`, `underlin
 
 ## TODO
 
-- support for event binding (as opposed to running on page load)
+- support for more types of event binding
 - flexible api naming conventions
-- typescript support
-- organize project better
 - apply data attrib params to links where possible
 - tests (lol)
+- composable themes/mixins to reduce the amount of markup needed for a typical use case
+
+## Areas for improvement
+
+### Wrapper
+
+- let elements define more than one effect?
+- customizable selectors (any advantage to using document meta tags over embedded blocks of script?)
+- exception lists/opt-out params
+
+### Beyond
+
+- timing curve of animations
+- better control of internal RN animation params?
+- make animations reversible
+- expand rtl support to circular effects

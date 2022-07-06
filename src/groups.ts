@@ -4,8 +4,7 @@ import {
   RoughAnnotationConfig,
   RoughAnnotationGroup,
 } from "rough-notation/lib/model";
-import { Options } from "./types";
-import { mapAttribToProperty } from "./attribs";
+import { AttribParserParams, Options } from "./types";
 
 export type Group = Array<{ el: HTMLElement; options: Options }> & {
   anno?: RoughAnnotationGroup;
@@ -50,16 +49,16 @@ export function register(el: HTMLElement, options: {}) {
   _rawGroupedElements.push({el, options});
 }
 
-export const GroupAttributeParsers = {
-  groupName: mapAttribToProperty(
+export const GroupAttributeParsers: {[param: string]: AttribParserParams} = {
+  groupName: [
     "group",
     "_groupName",
     (attrib) => attrib.split("/")[0]
-  ),
-  groupIndex: mapAttribToProperty("group", "_groupIndex", (attrib) =>
+  ],
+  groupIndex: ["group", "_groupIndex", (attrib) =>
     parseInt(attrib.split("/")[1], 10)
-  ),
-  group: mapAttribToProperty("group", "_group", (attrib, el, options) => {
+  ],
+  group: ["group", "_group", (attrib, el, options) => {
     const [groupName] = attrib.split("/");
     let group = _allGroups[groupName];
     if (group === undefined) {
@@ -68,5 +67,5 @@ export const GroupAttributeParsers = {
     }
     group.push({ el, options });
     return undefined;
-  }),
+  }]
 };
