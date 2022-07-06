@@ -1,4 +1,5 @@
-import { bindAllLinkHovers, _boundLinks, isTextualLink } from "./links";
+import { bindAllLinkHovers, _boundLinks, isTextualLink, unbindAll } from "./links";
+import { get as getConfig, init as initConfig } from "./config";
 import $ from "jquery";
 
 const TEST_DOM = `
@@ -9,13 +10,20 @@ const TEST_DOM = `
 </div>
 `;
 
-$(TEST_DOM).appendTo(document.body);
-
 function buildFragment(fragment: string) {
   return $(fragment)[0];
 }
 
 describe("link hovers", () => {
+  beforeEach(() => {
+    $(TEST_DOM).appendTo(document.body);
+  });
+
+  afterEach(() => {
+    $("body > *").remove();
+    unbindAll();
+  })
+
   it("jquery works", () => {
     expect(
       window.document.querySelectorAll("a.rn-effect-link-hover").length
@@ -28,6 +36,24 @@ describe("link hovers", () => {
   it("binds to marked links", () => {
     bindAllLinkHovers();
     expect(_boundLinks.length).toEqual(2);
+  })
+
+  describe("detectTextLinks flag in config root", () => {
+    it('works when turned on', () => {
+      initConfig({
+        detectTextLinks: true
+      });
+      bindAllLinkHovers();
+      expect(_boundLinks.length).toEqual(3);
+    });
+
+    it('works when turned off', () => {
+      initConfig({
+        detectTextLinks: false
+      });
+      bindAllLinkHovers();
+      expect(_boundLinks.length).toEqual(2);
+    });
   });
 });
 
@@ -43,9 +69,9 @@ describe("textual link detection", () => {
 
   it("rejects things that aren't links", () => {
     expect(isTextualLink(buildFragment("<div>want to buy some nft's?</div>"))).toEqual(false);
-  })
+  });
 
   it("rejects links that contain non-whitelisted child elements", () => {
     expect(isTextualLink(buildFragment("<a><img /></a>"))).toEqual(false);
-  })
+  });
 })

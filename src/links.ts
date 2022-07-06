@@ -3,13 +3,13 @@ import $ from "jquery";
 import * as RoughNotation from "rough-notation";
 import { RoughAnnotationConfig } from "rough-notation/lib/model";
 import { Options } from "./types";
+import { get as getConfig } from "./config";
 
 const DEFAULT_LINK_STYLE = "double";
-const BIND_TO_ALL_TEXT_LINKS = true;
 
 // TODO: MIKE: parse page meta tags for things like this? (and maybe selectors to use?)
 
-export const _boundLinks: Element[] = [];
+export let _boundLinks: Element[] = [];
 
 export const LinkStyles: { [style: string]: Options } = {
     double: {
@@ -51,7 +51,7 @@ export function bindLinkHover(el: Element, preset = DEFAULT_LINK_STYLE) {
 function getLinkElements(): HTMLElement[] {
     const out: HTMLElement[] = [];
 
-    for (const el of $(BIND_TO_ALL_TEXT_LINKS ? "a" : "a.rn-effect-link-hover")) {
+    for (const el of $(getConfig().detectTextLinks ? "a" : "a.rn-effect-link-hover")) {
         if (isTextualLink(el)) out.push(el);
     }
     return out;
@@ -86,6 +86,13 @@ export function bindAllLinkHovers() {
     for (const el of links) {
         bindLinkHover(el, el.getAttribute("data-effect-link-style") ?? undefined);
     }
+}
+
+export function unbindAll() {
+    for (const el of _boundLinks) {
+        $(el).off();
+    }
+    _boundLinks = [];
 }
 
 export default {
