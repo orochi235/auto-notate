@@ -1,4 +1,3 @@
-import { defaults } from "lodash";
 import { NativeEffects } from "./types";
 import { RoughAnnotationConfig } from "rough-notation/lib/model";
 
@@ -49,7 +48,7 @@ const DEFAULT_OPTIONS: AutoNotateOptions = {
 }
 
 function generateOptions(userOptions: AutoNotateOptions): OptionsHash {
-    return defaults(userOptions, DEFAULT_OPTIONS);
+    return Object.assign({}, DEFAULT_OPTIONS, userOptions);
 }
 
 export function get(path: string = null, context: OptionsHash = _globalOptions): OptionsHash {

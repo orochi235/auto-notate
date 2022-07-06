@@ -15,16 +15,13 @@
     "rough-notation": "^0.5.1"
   },
   "devDependencies": {
-    "@optimize-lodash/rollup-plugin": "^3.0.0",
     "@rollup/plugin-commonjs": "^22.0.1",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-typescript": "^8.3.3",
     "@types/jest": "^28.1.4",
     "@types/jquery": "^3.5.14",
-    "@types/lodash": "^4.14.182",
     "jest": "^28.1.2",
     "jest-environment-jsdom": "^28.1.2",
-    "lodash": "^4.17.21",
     "prettier": "^2.7.1",
     "rollup": "^2.75.7",
     "ts-jest": "^28.0.5",
