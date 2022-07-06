@@ -19,7 +19,14 @@
     <script src="./node_modules/jquery/dist/jquery.js"></script>
     <script src="./dist/auto-notate.js"></script>
     <script>
-        AutoNotate.run();
+        AutoNotate.run(/*{
+            detectTextLinks: false,
+            defaults: {
+                highlight: {
+                    color: "lime",
+                }
+            }
+        }*/);
     </script>
 </head>
 <body>
