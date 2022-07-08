@@ -1,6 +1,7 @@
 import { AttribParserCallback, AttribParserParams, AttributeMapper, AttributeParserCallbackResult } from "./types";
-import { GroupAttributeParsers } from "./groups";
 import { Options, ParserMap } from "./types";
+import { EventAttributeParsers } from "./events";
+import { GroupAttributeParsers } from "./groups";
 
 const PARSERS: ParserMap = {
     animate: mapAttribToProperty("animate", "animate", (a) => !(a.toLowerCase() === "false")),
@@ -14,7 +15,8 @@ const PARSERS: ParserMap = {
     padding: mapAttribToProperty("padding", "padding", parseFloat),
     strokeWidth: mapAttribToProperty("stroke-width", "strokeWidth"),
     rtl: mapAttribToProperty("reverse", "rtl", (a) => a !== undefined),
-    ...buildParsers(GroupAttributeParsers)
+    ...buildParsers(GroupAttributeParsers),
+    ...buildParsers(EventAttributeParsers),
 };
 
 function buildParsers(params: {[paramName: string]: AttribParserParams}) {

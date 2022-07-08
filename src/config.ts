@@ -38,11 +38,12 @@ let _globalOptions: OptionsHash & AutoNotateOptions = {};
 
 
 const DEFAULT_OPTIONS: AutoNotateOptions = {
-    detectTextLinks: false,
+    detectTextLinks: true,
     defaults: {
         highlight: {
             type: "highlight",
-            color: "rgba(255, 207, 11, .4)"
+            color: "rgba(255, 207, 11, .4)",
+            multiline: true,
         },
     }
 }

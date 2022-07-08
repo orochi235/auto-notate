@@ -29,20 +29,31 @@ export const DefaultEffectOptions: { [style: string]: Options } = {
 
 const buildSelector = (type: string) => `.rn-effect-${type}`;
 
-const buildOptions = (effect: RoughAnnotationType, el: HTMLElement): Options => {
+export const buildOptions = (effect: RoughAnnotationType, el: HTMLElement): Options => {
     const defaults = DefaultEffectOptions[effect] || {} as Options;
     const out = parseAttributesForElement(el, defaults);
     out.type = effect;
     return out;
 };
 
+export const buildOptionsForElement = (el: HTMLElement): Options => {
+    const effect = getEffectsFromClassList(el)[0] || "";
+    const defaults = DefaultEffectOptions[effect] || {} as Options;
+    const out = parseAttributesForElement(el, defaults);
+    out.type = effect as NativeEffects;
+    return out;
+};
+
+
 export const initEffects = () => {
     for (const effectName in NativeEffects) {
         const e = $(buildSelector(effectName));
         for (const el of e) {
             const options = buildOptions(effectName as RoughAnnotationType, el);
-            if (!options._groupName) runEffect(el, options);
-            else registerAsGroupMember(el, options);
+            if (options._groupName) registerAsGroupMember(el, options);
+            else {
+                if (!el.hasAttribute("data-effect-trigger")) runEffect(el, options);
+            }
         }
     }
     initGroupEffects();
@@ -59,3 +70,10 @@ export const runEffect = (el: HTMLElement, options: Options) => {
     }
     _allEffects.push(anno);
 };
+
+const getEffectsFromClassList = (el: Element): NativeEffects[] => {
+    const prefix = "rn-effect-"
+    const classes = Array.from(el.classList).filter(cl => cl.substr(0, prefix.length) === prefix);
+    const pattern = /^rn-effect-(.+)$/;
+    return classes.map(cl => pattern.exec(cl)[1] as NativeEffects);
+}

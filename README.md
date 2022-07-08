@@ -65,6 +65,7 @@ Note that RoughNotation only supports this option for the `highlight`, `underlin
 
 ### Wrapper
 
+- catch-all `data-effect-params` attrib that accepts json for all other attribs
 - let elements define more than one effect?
 - customizable selectors (any advantage to using document meta tags over embedded blocks of script?)
 - exception lists/opt-out params
