@@ -35,10 +35,6 @@ function getWatchedElement(el: Element, list: WatchedEventTrigger[] = _watchedEl
 }
 
 function updateWatchedElement(entry: IntersectionObserverEntry) {
-
-    console.log("WATCHED ELEMENTS", _watchedElements);
-    console.log("ENTRY", entry);
-
     const frame = getWatchedElement(entry.target); // TODO: MIKE: any reason not to support multiples?
     if(!frame) throw new Error("couldn't find effect frame for element " + entry.target);
     if (frame.state === "ready" && entry.isIntersecting) {
