@@ -2,44 +2,20 @@
 import $ from "jquery";
 import * as RoughNotation from "rough-notation";
 import { RoughAnnotationConfig } from "rough-notation/lib/model";
+import { config } from "./config";
 import { Options } from "./types";
-import { get as getConfig } from "./config";
-
-const DEFAULT_LINK_STYLE = "double";
 
 // TODO: MIKE: parse page meta tags for things like this? (and maybe selectors to use?)
 
 export let _boundLinks: Element[] = [];
 
-export const LinkStyles: { [style: string]: Options } = {
-    double: {
-        type: "highlight",
-        color: "rgba(255, 209, 59, .6)",
-        animationDuration: 500,
-        iterations: 2,
-        multiline: true,
-    },
-    angry: {
-        type: "highlight",
-        color: "rgba(255, 100, 100, .1)",
-        animationDuration: 4000,
-        iterations: 33,
-        multiline: true,
-    },
-    quick: {
-        type: "highlight",
-        color: "rgba(255, 209, 59, .8)",
-        animationDuration: 100,
-        iterations: 1,
-        multiline: true,
-    },
-}
+const LinkStyles: { [style: string]: Options } = config.links?.styles;
 
-export function bindLinkHover(el: Element, preset = DEFAULT_LINK_STYLE) {
+export function bindLinkHover(el: Element, preset = config.links.defaultStyle) {
     if (el.hasAttribute("data-link-hover-bound")) return;
     el.setAttribute("data-link-hover-bound", null);
     $(el).on("mouseenter",(ev) => {
-        const anno = RoughNotation.annotate(ev.currentTarget as HTMLElement, LinkStyles[preset] as RoughAnnotationConfig);
+        const anno = RoughNotation.annotate(ev.currentTarget as HTMLElement, config.links.styles[preset] as RoughAnnotationConfig);
         anno.show();
         ($(ev.target).one("mouseleave", () => {
             anno.hide();
@@ -51,10 +27,19 @@ export function bindLinkHover(el: Element, preset = DEFAULT_LINK_STYLE) {
 function getLinkElements(): HTMLElement[] {
     const out: HTMLElement[] = [];
 
-    for (const el of $(getConfig().detectTextLinks ? "a" : "a.rn-effect-link-hover")) {
+    const baseSelector = config.links.detect ? "a" : "a.rn-effect-link-hover";
+    const ignoreWhen = config.links.ignoreWhen ?? (() => false);
+    for (const el of $(baseSelector)) {
+        if (ignoreWhen(el)) continue;
         if (isTextualLink(el)) out.push(el);
     }
     return out;
+}
+
+function hasAncestor(el: HTMLElement, selector: string): boolean {
+    if (el.matches(selector)) return true;
+    if (el.parentElement === null) return false;
+    return hasAncestor(el.parentElement, selector);
 }
 
 export function isTextualLink(node: Node, isChildQuery = false): boolean {
@@ -72,13 +57,13 @@ export function isTextualLink(node: Node, isChildQuery = false): boolean {
     if (isChildQuery && node.nodeType === Node.TEXT_NODE) return true;
 
     // TODO: MIKE: potential things to check: inline[-block]?, element height,
-    if (node.childNodes.length === 1 && node.firstChild.nodeType === Node.TEXT_NODE) return true; // contains just a text node
-    if (!(node.nodeType in [Node.ELEMENT_NODE, Node.TEXT_NODE, Node.COMMENT_NODE])) return false;
+    // if (node.childNodes.length === 1 && node.firstChild.nodeType === Node.TEXT_NODE) return true; // contains just a text node
+    if (![Node.ELEMENT_NODE, Node.TEXT_NODE, Node.COMMENT_NODE].includes(node.nodeType)) return false;
 
     // disallow elements that aren't in the whitelist:
     if (node.nodeType === Node.ELEMENT_NODE && !ELEMENT_WHITELIST.includes((node as HTMLElement).tagName.toLowerCase())) return false;
 
-    return Array.from(node.childNodes).map(node => isTextualLink(node, true)).every(x => x);
+    return Array.from(node.childNodes).map(node => isTextualLink(node, true)).every(x => !!x);
 }
 
 export function bindAllLinkHovers() {

@@ -1,49 +1,32 @@
 import $ from "jquery";
 import * as RoughNotation from "rough-notation";
-import { RoughAnnotationConfig, RoughAnnotationType } from "rough-notation/lib/model";
+import { RoughAnnotation, RoughAnnotationConfig, RoughAnnotationType } from "rough-notation/lib/model";
 import { NativeEffects, Options } from "./types";
 import { parseAttributesForElement } from "./attribs";
 import { register as registerAsGroupMember, init as initGroupEffects } from './groups';
+import { config, OptionsHash } from "./config";
 
 const _allEffects = [];
-
-export const VirtualEffectNames = [
-    "link-hover",
-];
 
 const NativeEffectNames = [];
 for (const effect in NativeEffects) NativeEffectNames.push(effect);
 
-export const AllEffectNames = [
-    ...NativeEffectNames,
-    ...VirtualEffectNames,
-]
-
-export const DefaultEffectOptions: { [style: string]: Options } = {
-    highlight: {
-        type: "highlight",
-        color: "rgba(255, 207, 11, .4)"
-    },
-};
-
-
 const buildSelector = (type: string) => `.rn-effect-${type}`;
 
-export const buildOptions = (effect: RoughAnnotationType, el: HTMLElement): Options => {
-    const defaults = DefaultEffectOptions[effect] || {} as Options;
-    const out = parseAttributesForElement(el, defaults);
+const buildOptions = (effect: RoughAnnotationType, el: HTMLElement): Options => {
+    const out = parseAttributesForElement(el, config.effects[effect] ?? {});
     out.type = effect;
     return out;
 };
 
-export const buildOptionsForElement = (el: HTMLElement): Options => {
+/**
+ * Wrapper for buildOptions that additionally infers the effect type from an attached class name.
+ * @param el The element to be wrapped
+ */
+const buildOptionsForElement = (el: HTMLElement): Options => {
     const effect = getEffectsFromClassList(el)[0] || "";
-    const defaults = DefaultEffectOptions[effect] || {} as Options;
-    const out = parseAttributesForElement(el, defaults);
-    out.type = effect as NativeEffects;
-    return out;
+    return buildOptions(effect as RoughAnnotationType, el);
 };
-
 
 export const initEffects = () => {
     for (const effectName in NativeEffects) {
@@ -59,8 +42,16 @@ export const initEffects = () => {
     initGroupEffects();
 };
 
-export const runEffect = (el: HTMLElement, options: Options) => {
-    const anno = RoughNotation.annotate(el, options as RoughAnnotationConfig);
+const initEffect = (el: HTMLElement, options: Options = {}): RoughAnnotation => {
+    // TODO: MIKE: integrate defaults
+    // TODO: MIKE: build options hash here
+    console.log("initEffect options", buildOptionsForElement(el));
+    return RoughNotation.annotate(el, options as RoughAnnotationConfig);
+}
+
+export const runEffect = (el: HTMLElement, options: Options = {}): RoughAnnotation => {
+    // TODO: MIKE: do init outside of here
+    const anno = initEffect(el, options);
     if (options._delay) {
         setTimeout(() => {
             anno.show();
@@ -69,9 +60,14 @@ export const runEffect = (el: HTMLElement, options: Options) => {
         anno.show();
     }
     _allEffects.push(anno);
+    return anno;
 };
 
-const getEffectsFromClassList = (el: Element): NativeEffects[] => {
+export function getDefaultsForEffect(effect: RoughAnnotationType): OptionsHash {
+    return config.effects[effect] ?? {};
+}
+
+export const getEffectsFromClassList = (el: Element): NativeEffects[] => {
     const prefix = "rn-effect-"
     const classes = Array.from(el.classList).filter(cl => cl.substr(0, prefix.length) === prefix);
     const pattern = /^rn-effect-(.+)$/;

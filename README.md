@@ -55,6 +55,7 @@ Note that RoughNotation only supports this option for the `highlight`, `underlin
 
 ## TODO
 
+- make all binds a trigger? (or have a default trigger value of `appear`?)
 - support for more types of event binding
 - flexible api naming conventions
 - apply data attrib params to links where possible

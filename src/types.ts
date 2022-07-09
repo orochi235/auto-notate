@@ -22,7 +22,7 @@ export enum VirtualEffects {
 }
 
 export type AttributeMapperResult = any;
-export type AttributeParserCallbackResult = [string, string | void] | void;
+export type AttributeParserCallbackResult = [string, any];
 export type AttribParserCallback =
     (attrib: string, el: HTMLElement, options: Options) => AttributeParserCallbackResult
         | any;

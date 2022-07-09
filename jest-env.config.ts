@@ -18,6 +18,9 @@ const { window } = new JSDOM(SAMPLE_DOM, {
     runScripts: "dangerously"
 });
 const $ = jq(window);
+
+const MockIntersectionObserver = function () {} as any;
+
 class CustomTestEnvironment extends TestEnvironment {
     async setup() {
         await super.setup();
@@ -30,6 +33,7 @@ class CustomTestEnvironment extends TestEnvironment {
         }
         this.global.$ = $;
         this.global.jQuery = $;
+        this.global.IntersectionObserver = MockIntersectionObserver;
     }
 }
 

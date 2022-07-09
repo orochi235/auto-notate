@@ -19,14 +19,16 @@
     <script src="./node_modules/jquery/dist/jquery.js"></script>
     <script src="./dist/auto-notate.js"></script>
     <script>
-        AutoNotate.run(/*{
-            detectTextLinks: false,
-            defaults: {
+        AutoNotate.run({
+            links: {
+                detect: true
+            },
+            effects: {
                 highlight: {
-                    color: "lime",
+                    color: "rgba(0,255,30,.3)",
                 }
             }
-        }*/);
+        });
     </script>
 </head>
 <body>
@@ -60,6 +62,8 @@
     <span> to </span>
     <span data-effect-color="red" class="rn-effect-bracket">emphasize.</span>
 </div>
+<hr />
+<h3>Explicit Link Declarations:</h3>
 <div>Now
     <a href="https://www.msnbc.com/"
        class="rn-effect-link-hover"
@@ -80,8 +84,10 @@
 <div><a href="#">Innocuous link that doesn't explicitly get bound</a></div>
 <div><a href="#">i may be <i>crazy</i> but i should still get a highlight</a></div>
 <div><a href="#">this one shouldn't qualify, though :( <img /></a></div>
+<hr />
+<h3>Scroll triggers:</h3>
 <div style="height: 600px;"></div>
-<h3>Scroll triggers</h3>
 <div class="rn-effect-circle" data-effect-trigger="appear">This should get circled when it scrolls into view</div>
+<div class="rn-effect-highlight" data-effect-trigger="appear">This should get highlighted when it scrolls into view</div>
 </body>
 </html>

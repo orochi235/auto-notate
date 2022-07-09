@@ -1,5 +1,5 @@
 import { bindAllLinkHovers, _boundLinks, isTextualLink, unbindAll } from "./links";
-import { get as getConfig, init as initConfig } from "./config";
+import config from "./config";
 import $ from "jquery";
 
 const TEST_DOM = `
@@ -34,22 +34,31 @@ describe("link hovers", () => {
   });
 
   it("binds to marked links", () => {
+    config.init({
+      links: {
+        detect: false,
+      }
+    });
     bindAllLinkHovers();
     expect(_boundLinks.length).toEqual(2);
   })
 
-  describe("detectTextLinks flag in config root", () => {
+  describe("links.detect flag in config", () => {
     it('works when turned on', () => {
-      initConfig({
-        detectTextLinks: true
+      config.init({
+        links: {
+          detect: true
+        }
       });
       bindAllLinkHovers();
       expect(_boundLinks.length).toEqual(3);
     });
 
     it('works when turned off', () => {
-      initConfig({
-        detectTextLinks: false
+      config.init({
+        links: {
+          detect: false,
+        }
       });
       bindAllLinkHovers();
       expect(_boundLinks.length).toEqual(2);
@@ -73,5 +82,6 @@ describe("textual link detection", () => {
 
   it("rejects links that contain non-whitelisted child elements", () => {
     expect(isTextualLink(buildFragment("<a><img /></a>"))).toEqual(false);
+    expect(isTextualLink(buildFragment("<a>here's some text <h1>and a heading</h1><p>and a paragraph</p></a>"))).toEqual(false);
   });
 })
