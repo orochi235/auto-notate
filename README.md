@@ -18,6 +18,14 @@ Effects are implemented via CSS classes bound to qualifying elements. The follow
 
 Additionally, the "virtual" effect `rn-effect-link-hover` is supported. When this class is used, a link hover style can optionally be specified by the data attribute `data-effect-link-style`.
 
+### Triggers
+
+You can specify the timing of an effect with the `data-effect-trigger` attribute. Supported values are `appear` (when an item is scrolled into view), `hover`, and `load`.
+
+### Link Detection
+
+If you set the `links.detect` option to true, the library will scan the DOM for links it deems suitable for hover highlihts, and bind them automatically.
+
 ### Params
 
 Many effects accept parameters (RoughNotation calls them options) such as color and padding. auto-notate reads these in via data attributes and passes them to the underlying library. Values match those specified in the RoughNotation API unless otherwise noted.
