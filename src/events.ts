@@ -52,8 +52,7 @@ function updateWatchedElement(entry: IntersectionObserverEntry) {
 function watchElement(element: HTMLElement, event: EventTriggerType, options: Options): WatchedEventTrigger {
     const effect = getEffectsFromClassList(element)[0];
     const builtOptions = Object.assign({}, getDefaultsForEffect(effect), options)
-
-    const anno = RoughNotation.annotate(element, options as RoughAnnotationConfig);
+    const anno = RoughNotation.annotate(element, builtOptions);
     const out: WatchedEventTrigger = {
         element, event, anno,
         options: builtOptions,
@@ -64,6 +63,7 @@ function watchElement(element: HTMLElement, event: EventTriggerType, options: Op
 }
 
 function playEffect(effect: WatchedEventTrigger) {
+    console.debug("playing effect", effect)
     if (effect.state !== "ready") {
         console.warn("trying to play a watched effect that isn't in ready state");
         return;
@@ -72,6 +72,7 @@ function playEffect(effect: WatchedEventTrigger) {
     effect.state = "played";
 }
 function stopEffect(effect: WatchedEventTrigger) {
+    console.debug("stopping effect", effect)
     if (effect.state !== "played") {
         console.warn("trying to stop a watched effect that isn't in played state");
         return;
@@ -91,6 +92,7 @@ const eventHandlers: EventMapping<EventHandler> = {
     appear: {
         // triggers when an element scrolls into view. if the element is already in view, triggers immediately
         event: "appear",
+        // TODO: MIKE: this should be the default behavior for anything with no trigger specified (other than links)
         bind: (element, options) => {
             appearWatcher.observe(element);
             watchElement(element, "appear", options);

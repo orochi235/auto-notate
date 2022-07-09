@@ -63,8 +63,11 @@ export const runEffect = (el: HTMLElement, options: Options = {}): RoughAnnotati
     return anno;
 };
 
-export function getDefaultsForEffect(effect: RoughAnnotationType): OptionsHash {
-    return config.effects[effect] ?? {};
+export function getDefaultsForEffect(effect: RoughAnnotationType): RoughAnnotationConfig {
+    return {
+        ...(config.effects[effect] ?? {}),
+        type: effect,
+    };
 }
 
 export const getEffectsFromClassList = (el: Element): NativeEffects[] => {

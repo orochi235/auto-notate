@@ -23,9 +23,8 @@ export type AutoNotateOptions = {
 export type EffectDefaults = EffectMapping<Partial<RoughAnnotationConfig> & OptionsHash>;
 
 type OptionsPrimitive = string | number | null | boolean | Function;
-type OptionsField = OptionsPrimitive;// | OptionsHash;// | Array<OptionsField>;
 export type OptionsHash = {
-    [key: string]: OptionsField | OptionsHash;
+    [key: string]: OptionsPrimitive | OptionsHash;
 };
 
 let _globalOptions: OptionsHash & AutoNotateOptions = {};
