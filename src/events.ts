@@ -19,46 +19,61 @@ type EventMapping<T> = {
 
 type AnnotationState = "ready" | "played";
 
-// TODO: MIKE: state machine?
-type WatchedEventTrigger = {
+type EventWatcher = {
     element: HTMLElement;
-    event: EventTriggerType;
+    trigger: EventTriggerType;
     state: AnnotationState;
     anno: RoughAnnotation;
     options?: Options;
 };
 
-let _watchedElements: WatchedEventTrigger[] = [];
+type EventWatcherRegistry = {
+    [type in EventTriggerType]?: EventWatcher[]
+};
 
-function getWatchedElement(el: Element, list: WatchedEventTrigger[] = _watchedElements): WatchedEventTrigger {
-    return list.find(item => item.element === el);
+let _watchedElements: EventWatcherRegistry = {
+    appear: [],
+    hover: [],
+    load: [],
+};
+// let _watchedElements: EventWatcher[] = [];
+
+function getWatchedElements(el: Element): EventWatcher[] {
+    return [
+        ..._watchedElements.appear,
+        ..._watchedElements.hover,
+        ..._watchedElements.load,
+    ].filter(item => item.element === el);
 }
 
 function updateWatchedElement(entry: IntersectionObserverEntry) {
-    const frame = getWatchedElement(entry.target); // TODO: MIKE: any reason not to support multiples?
-    if(!frame) throw new Error("couldn't find effect frame for element " + entry.target);
-    if (frame.state === "ready" && entry.isIntersecting) {
-        playEffect(frame);
-    }
-    if (frame.state === "played" && !entry.isIntersecting) {
-        stopEffect(frame);
+    const frames = getWatchedElements(entry.target); // TODO: MIKE: any reason not to support multiples?
+    if (frames.length === 0) throw new Error("couldn't find effect frame for element " + entry.target);
+
+    for (const frame of frames) {
+        if (frame.state === "ready" && entry.isIntersecting) {
+            playEffect(frame);
+        }
+        if (frame.state === "played" && !entry.isIntersecting) {
+            stopEffect(frame);
+        }
     }
 }
 
-function watchElement(element: HTMLElement, event: EventTriggerType, options: Options): WatchedEventTrigger {
+function watchElement(element: HTMLElement, trigger: EventTriggerType, options: Options): EventWatcher {
     const effect = getEffectsFromClassList(element)[0];
     const builtOptions = Object.assign({}, getDefaultsForEffect(effect), options)
     const anno = RoughNotation.annotate(element, builtOptions);
-    const out: WatchedEventTrigger = {
-        element, event, anno,
+    const out: EventWatcher = {
+        element, trigger, anno,
         options: builtOptions,
         state: "ready",
     };
-    _watchedElements.push(out);
+    _watchedElements[trigger].push(out);
     return out;
 }
 
-function playEffect(effect: WatchedEventTrigger) {
+function playEffect(effect: EventWatcher) {
     console.debug("playing effect", effect)
     if (effect.state !== "ready") {
         console.warn("trying to play a watched effect that isn't in ready state");
@@ -67,7 +82,7 @@ function playEffect(effect: WatchedEventTrigger) {
     effect.anno.show();
     effect.state = "played";
 }
-function stopEffect(effect: WatchedEventTrigger) {
+function stopEffect(effect: EventWatcher) {
     console.debug("stopping effect", effect)
     if (effect.state !== "played") {
         console.warn("trying to stop a watched effect that isn't in played state");
