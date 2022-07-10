@@ -33,7 +33,8 @@ const out: AutoNotateOptions = {
         box: {},
         bracket: {},
         circle: {
-            animationDuration: 3000,
+            animationDuration: 500,
+            iterations: 1,
         },
         "crossed-off": {
             animationDuration: 400,
@@ -44,6 +45,14 @@ const out: AutoNotateOptions = {
         },
         "strike-through": {},
         underline: {},
+    },
+    events: {
+        appear: {
+            repeat: false,
+        },
+        hover: {
+            repeat: true,
+        }
     }
 }
 

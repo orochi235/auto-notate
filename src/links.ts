@@ -36,7 +36,7 @@ function getLinkElements(): HTMLElement[] {
     return out;
 }
 
-function hasAncestor(el: HTMLElement, selector: string): boolean {
+export function hasAncestor(el: HTMLElement, selector: string): boolean {
     if (el.matches(selector)) return true;
     if (el.parentElement === null) return false;
     return hasAncestor(el.parentElement, selector);

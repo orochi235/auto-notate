@@ -5,6 +5,7 @@ export interface Options extends Partial<RoughAnnotationConfig> {
     _groupIndex?: number,
     _groupName?: string,
     _delay?: number,
+    _repeat?: boolean,
 }
 
 export enum NativeEffects {
@@ -20,6 +21,9 @@ export enum NativeEffects {
 export enum VirtualEffects {
     linkHover = "link-hover",
 }
+
+
+export type EventTriggerType = "hover" | "appear" | "load";
 
 export type AttributeMapperResult = any;
 export type AttributeParserCallbackResult = [string, any];

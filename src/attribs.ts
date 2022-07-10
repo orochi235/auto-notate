@@ -17,6 +17,7 @@ const PARSERS: ParserMap = {
     rtl: mapAttribToProperty("reverse", "rtl", (a) => a !== undefined),
     ...buildParsers(GroupAttributeParsers),
     ...buildParsers(EventAttributeParsers),
+    params: mapAttribToProperty("params", null, parseJsonParams),   // TODO: MIKE: this blows to use. remove?
 };
 
 function buildParsers(params: {[paramName: string]: AttribParserParams}) {
@@ -37,6 +38,10 @@ export function mapAttribToProperty(attribName: string,
             return [propName, fn(attrib, el, options)];
         }
     };
+}
+
+function parseJsonParams(value: string) {
+    return JSON.parse(value);
 }
 
 export function parseAttributesForElement(el: HTMLElement, options: Options = {}): Options {

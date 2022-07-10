@@ -43,9 +43,8 @@ export const initEffects = () => {
 };
 
 const initEffect = (el: HTMLElement, options: Options = {}): RoughAnnotation => {
-    // TODO: MIKE: integrate defaults
-    // TODO: MIKE: build options hash here
-    console.log("initEffect options", buildOptionsForElement(el));
+    // TODO: MIKE: integrate defaults?
+    // TODO: MIKE: build options hash here?
     return RoughNotation.annotate(el, options as RoughAnnotationConfig);
 }
 
