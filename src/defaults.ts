@@ -52,6 +52,9 @@ const out: AutoNotateOptions = {
         },
         hover: {
             repeat: true,
+        },
+        load: {
+            repeat: false,
         }
     }
 }

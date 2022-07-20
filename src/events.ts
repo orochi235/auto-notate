@@ -159,14 +159,14 @@ const eventHandlers: EventMapping<EventHandler> = {
             return frame;
         }
     },
-    // load: {
-    //     event: "load",
-    //     bind: element => {
-    //
-    //         // TODO: MIKE:
-    //     }
-    // },
-
+    load: {
+        event: "load",
+        bind: (element, options) => {
+            const frame = initWatcher(element, "load", options, options._delay ?? 0);
+            playEffect(frame);
+            return frame;
+        }
+    },
 };
 
 export const EventAttributeParsers: { [param: string]: AttribParserParams } = {
