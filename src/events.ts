@@ -102,9 +102,12 @@ function playEffect(effect: EventWatcher) {
         return;
     }
 
-    console.debug("playing effect", effect)
-    effect.anno.show();
-    effect.state = "played";
+    if (effect.options._delay > 0) console.log("setting delay", effect.options._delay);
+    setTimeout(() => {
+        console.debug("playing effect", effect)
+        effect.anno.show();
+        effect.state = "played";
+    }, effect.options._delay ?? 0);
 }
 
 function stopEffect(effect: EventWatcher) {

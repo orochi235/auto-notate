@@ -7,7 +7,7 @@ const PARSERS: ParserMap = {
     animate: mapAttribToProperty("animate", "animate", (a) => !(a.toLowerCase() === "false")),
     brackets: mapAttribToProperty("brackets", "brackets", a => a.split(',').map(b => b.trim())),
     color: mapAttribToProperty("color"),
-    delay: mapAttribToProperty("delay", "_delay", parseFloat),
+    delay: mapAttribToProperty("delay", "_delay", a => parseFloat(a) * 1000),
     duration: mapAttribToProperty("duration", "animationDuration", a => parseFloat(a) * 1000),
     iterations: mapAttribToProperty("iterations", "iterations", parseFloat),
     // "link-style": handled externally
