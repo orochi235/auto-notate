@@ -54,7 +54,7 @@ export const runEffect = (el: HTMLElement, options: Options = {}): RoughAnnotati
     if (options._delay) {
         setTimeout(() => {
             anno.show();
-        }, options._delay * 1000);
+        }, options._delay);
     } else {
         anno.show();
     }
